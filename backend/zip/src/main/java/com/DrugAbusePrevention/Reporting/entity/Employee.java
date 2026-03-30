@@ -7,23 +7,24 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Document(collection = "employees")
 @Getter
 @Setter
 public class Employee {
     @Id
     private String employeeId;
-
     @NonNull
-    private String name;
-
+    private String employeeName;
     @NonNull
-    private String todayLocation;
+    private String employeePassword;
     @NonNull
-    private String post;
+    private String employeeEmail;
     @NonNull
-    private String mobile;
+    private String employeeTodayLocation;
     @NonNull
-    private String email;
+    private String employeeMobile;
+    private List<String> roles;
     private Boolean verified = false;
 }

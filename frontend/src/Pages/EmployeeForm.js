@@ -4,31 +4,35 @@ import { saveEmployee } from ".././api/employeeApi";
 
 const EmployeeForm = () => {
   const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
   const [employeeId,setEmployeeId] = useState();
   const [todayLocation, setTodayLocation] = useState("");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
-  const [post, setPost] = useState("warden");
+  const [roles, setRoles] = useState("warden");
 
 
   const handleNameChange = (e) => setName(e.target.value);
+  const handlePasswordChange = (e) => setPassword(e.target.value);
   const handleEmployeeIdChange = (e) => setEmployeeId(e.target.value);
   const handleLocationChange = (e) => setTodayLocation(e.target.value);
   const handleMobileChange = (e) => setMobile(e.target.value);
   const handleEmailChange = (e) => setEmail(e.target.value);
-  const handlePostChange = (e) => setPost(e.target.value);
+  const handleRolesChange = (e) => setRoles(e.target.value);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const formData = {
-        name,
-        employeeId,
-        todayLocation,
-        mobile,
-        email,
-        post,
+
+          employeeId: employeeId,
+          employeeName: name,
+          employeePassword: password,
+          employeeEmail: email,
+          employeeTodayLocation: todayLocation,
+          employeeMobile: mobile,
+          roles: ["WARDEN"]
       }
 
       const response = await saveEmployee(formData);
@@ -36,11 +40,12 @@ const EmployeeForm = () => {
       console.log("Employee Registration Form submitted successfully:", response.data);
      alert("Employee Registration Successful. Please check your mail for further steps ")
       setName("");
+      setPassword("");
       setEmployeeId("");
       setTodayLocation("");
       setMobile("");
       setEmail("");
-      setPost("warden");
+      setRoles("warden");
 
     } catch (error) {
       console.error("Error submitting registration form:", error);
@@ -66,6 +71,18 @@ const EmployeeForm = () => {
               required
             />
           </div>
+          <div className="mb-4">
+                  <label className="block text-sm font-semibold text-gray-800">
+                        Password
+                      </label>
+                      <input
+                        type="text"
+                        value={password}
+                        onChange={handlePasswordChange}
+                        className="mt-1 p-2 w-full border border-gray-300 rounded text-gray-800"
+                        required
+                      />
+                    </div>
           <div className="mb-4">
             <label className="block text-sm font-semibold text-gray-800">
               EmployeeId
@@ -117,11 +134,11 @@ const EmployeeForm = () => {
 
           <div className="mb-4">
             <label className="block text-sm font-semibold text-gray-800">
-              Post
+              Role
             </label>
             <select
-              value={post}
-              onChange={handlePostChange}
+              value={roles}
+              onChange={handleRolesChange}
               className="mt-1 p-2 w-full border border-gray-300 text-gray-800 rounded"
               required
             >

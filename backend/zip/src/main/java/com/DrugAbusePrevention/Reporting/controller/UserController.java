@@ -6,6 +6,8 @@ import com.DrugAbusePrevention.Reporting.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,26 +17,19 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    //signup user
-    @PostMapping("/signup")
-    public ResponseEntity<Boolean> signUp(@RequestBody User user){
-        try{
-            userService.signup(user);
-            return new ResponseEntity<>(true,HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
-    }
     //login user
     @PostMapping("/login")
-    public ResponseEntity<Boolean>login(@RequestBody User user){
-
-         if(userService.login(user)){
-             return new ResponseEntity<>(true,HttpStatus.OK);
-         }else{
-             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Boolean>login(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+         User user = userService.findByUsername(username);
+         if(user != null) {
+             if (userService.login(user)) {
+                 return new ResponseEntity<>(true, HttpStatus.OK);
+             }
          }
+         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     // ✅ Debug endpoint (VERY helpful)

@@ -21,21 +21,17 @@ const UserLogin = () => {
        const payload = { email, password};
        const response = await loginUser(payload);
        const token = response?.data?.token;
-        if (response.status === 200) {
+        if (response.status === 200 && token) {
+          localStorage.setItem("token",token);
+          Cookies.set("token",token,{expires:7,sameSite:"Lax"});
+          api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+          console.log("[LOGIN] Token set, navigating...");
           navigate("/userDashboard");
         } else {
-          alert("Login failed");
+        console.log(token);
+         console.error("[LOGIN] Non-200 or token missing:", response?.status, response?.data);
+        alert("Login failed: token missing or unexpected response format");
         }
-
-//       if(!token){
-//        alert("Login failed: token missing in response");
-//        return;
-//       }
-//        console.log("Login successful!", response.data.token);
-//        localStorage.setItem("token",token);
-//        Cookies.set("token", token, { expires: 7, sameSite: "Lax" });
-//        api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-//        navigate("/userDashboard");
     } catch (error) {
         const msg =
             error?.response?.data?.error ||
