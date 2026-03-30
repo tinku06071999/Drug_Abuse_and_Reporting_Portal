@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import AdminHeader from './AdminHeader';
-import { getEmployees, verifyEmployee } from '../../api/employeeApi';
+import { getEmployees, verifyEmployee,makeAdmin } from '../../api/employeeApi';
 
 function RegisteredEmployees() {
   const [originalData, setOriginalData] = useState([]);
@@ -36,11 +35,8 @@ function RegisteredEmployees() {
     }
   }, [originalData, filterType]);
 
-  // IMPORTANT: Employees in your DB use `employeeId` (String) as @Id
-  // Do NOT use employee._id anywhere
   const handleVerification = async (employeeId, currentStatus, email) => {
     try {
-      // Call the correct API (path param), no body needed
       const { data: updatedEmployee } = await verifyEmployee(employeeId);
 
       // Update local cache
@@ -60,21 +56,35 @@ function RegisteredEmployees() {
             <p><strong>Next Steps:</strong> Please <a href="https://api.whatsapp.com/send?phone=+14155238886&text=join%20flame-color" target="_blank">Click Here</a> to start getting reports on your phone number.</p>
             OR you can WhatsApp 'join flame-color' to +14155238886 to start getting reports on your phone number.
           `;
-
-      // If you still want to send through your separate mail microservice:
-      // await axios.post('http://localhost:3001/api/send-email', {
-      //   to: email,
-      //   subject: emailSubject,
-      //   text: emailText,
-      //   html: emailHtml,
-      // });
-
     } catch (error) {
       console.error('Error updating employee verification status:', error);
       alert(error?.response?.data || error.message || 'Verification failed');
     }
   };
+const handleMakeAdmin = async (employeeId, currentStatus, email) => {
+    try {
+      const { data: updatedEmployee } = await makeAdmin(employeeId);
 
+      // Update local cache
+      setOriginalData((prev) =>
+        prev.map((emp) => (emp.employeeId === updatedEmployee.employeeId ? updatedEmployee : emp))
+      );
+
+      // (Optional) send your separate email call (if you still use node mailer service)
+      const emailSubject = currentStatus ? 'Removed From Administration' : 'Added In Admin Team';
+      const emailText = currentStatus
+        ? "You have been removed from the Admin List of Drug abuse reporting portal.."
+        : "You are now Admin on Drug Abuse Reporting Portal.";
+      const emailHtml = currentStatus
+        ? `<p>You have been removed from the Admin List of Drug abuse reporting portal.</p>`
+        : `
+            <p>You are now Admin on Drug Abuse Reporting Portal.</p>
+          `;
+    } catch (error) {
+      console.error('Error updating employee status:', error);
+      alert(error?.response?.data || error.message || 'Changes failed');
+    }
+  };
   if (loading) return <p>Loading...</p>;
 
   return (
@@ -129,12 +139,12 @@ function RegisteredEmployees() {
             {filteredEmployees.map((employee, index) => (
               <tr key={employee.employeeId} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
                 <td className="py-2 px-4 border-r">{index + 1}</td>
-                <td className="py-2 px-4 border-r">{employee.name}</td>
+                <td className="py-2 px-4 border-r">{employee.employeeName}</td>
                 <td className="py-2 px-4 border-r">{employee.employeeId}</td>
-                <td className="py-2 px-4 border-r">{employee.post}</td>
-                <td className="py-2 px-4 border-r">{employee.mobile}</td>
-                <td className="py-2 px-4 border-r">{employee.email}</td>
-                <td className="py-2 px-4 border-r">{employee.todayLocation}</td>
+                <td className="py-2 px-4 border-r">{employee.employeePost}</td>
+                <td className="py-2 px-4 border-r">{employee.employeeMobile}</td>
+                <td className="py-2 px-4 border-r">{employee.employeeEmail}</td>
+                <td className="py-2 px-4 border-r">{employee.employeeTodayLocation}</td>
                 <td className="py-2 px-4">
                   <button
                     className={`${employee.verified ? 'bg-green-500' : 'bg-red-500'} text-white px-4 py-2 rounded`}
@@ -142,6 +152,12 @@ function RegisteredEmployees() {
                   >
                     {employee.verified ? 'Unverify' : 'Verify'}
                   </button>
+                  <button
+                     className={`${employee.admin ? 'bg-green-500' : 'bg-red-500'} text-white px-4 py-2 rounded`}
+                     onClick={() => handleMakeAdmin(employee.employeeId, employee.admin, employee.email)}
+                     >
+                     {employee.admin ? 'Admin' : 'Employee'}
+                     </button>
                 </td>
               </tr>
             ))}

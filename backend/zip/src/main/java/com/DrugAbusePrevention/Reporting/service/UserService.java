@@ -28,4 +28,9 @@ public class UserService {
         }
         return false;
     }
+
+    public User findByUsername(String username){
+        return userServiceRepository.findByUsername(username).orElseThrow(null);
+    }
+
 }

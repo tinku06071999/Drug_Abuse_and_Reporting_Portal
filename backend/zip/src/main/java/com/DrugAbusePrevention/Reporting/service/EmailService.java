@@ -11,19 +11,32 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     @Autowired
-    private final JavaMailSender mailSender;
+    private JavaMailSender javaMailSender;
 
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+    // send email when an employee submit the registration form
+    public void sendSaveEmployeeEmail(String toEmail, String subject, String body) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(toEmail);
+        mail.setSubject(subject);
+        mail.setText(body);
+        javaMailSender.send(mail);
     }
 
-    public void sendEmail(String toEmail, String subject, String body) {
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setFrom("20bcs099@nith.ac.in");   // use your sender email
-        msg.setTo(toEmail);
-        msg.setSubject(subject);
-        msg.setText(body);
+    // send email when admin verify / unverified the employee
 
-        mailSender.send(msg);
+    public void sendStatusOfVerifactionChangemail(String toEmail, String subject, String body){
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(toEmail);
+        mail.setSubject(subject);
+        mail.setText(body);
+        javaMailSender.send(mail);
     }
+    public void sendAdminEmail(String toEmail, String subject, String body){
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(toEmail);
+        mail.setSubject(subject);
+        mail.setText(body);
+        javaMailSender.send(mail);
+    }
+
 }

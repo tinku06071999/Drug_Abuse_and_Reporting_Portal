@@ -1,16 +1,16 @@
 import api from "./apiClient";
 
-export const createReport = (payload) => api.post("/reports/savereport", payload);
-export const getAllReports = () => api.get("/reports/get_all_reports");
+export const createReport = (payload) => api.post("/public/save-report", payload);
+export const getAllReports = () => api.get("/reports/get-all-reports");
 
-export const updateReportStatus  = (id) => api.put("/reports/update_report_status", { id });
+export const updateReportStatus  = (id) => api.put("/reports/update-report-status", { id });
 export const getReportsByUser = () => api.get("/reports/my");
 
-export const getReportsByDate = (isoDate) => api.get("/reports/reports_by_date");
+export const getReportsByDate = (isoDate) => api.get("/reports/reports-by-date");
 // no of resolved reports
 
-export const getResolvedReports = () => api.get("/reports/total_resolved_reports");
+export const getResolvedReports = () => api.get("/reports/total-resolved-reports");
 
 //no of pending reports
 
-export const getPendingReports = () => api.get("/reports/total_pending_reports");
+export const getPendingReports = () => api.get("/reports/total-pending-reports");

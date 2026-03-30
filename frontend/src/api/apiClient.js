@@ -1,17 +1,63 @@
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || "/api",
-  // If you use proxy, keep baseURL "" and call "/api/..."
+const apiClient = axios.create({
+  baseURL: "/api",   // VERY IMPORTANT: must be empty to activate CRA proxy
   headers: { "Content-Type": "application/json" },
- withCredentials: true, // <--- add this if you use cookie-based auth
 });
 
-// Automatically attach token if you use JWT
-api.interceptors.request.use((config) => {
+/**
+ * Authorization helpers (unchanged)
+ */
+const applyAuthHeader = (token) => {
+  if (token) {
+    apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  } else {
+    delete apiClient.defaults.headers.common["Authorization"];
+  }
+};
+
+const bootstrapToken = () => {
   const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
+  applyAuthHeader(token);
+};
+bootstrapToken();
 
-export default api;
+export const setAuthToken = (token) => {
+  if (token) {
+    localStorage.setItem("token", token);
+    applyAuthHeader(token);
+  } else {
+    console.warn("setAuthToken called with an invalid token");
+  }
+};
+
+export const clearAuthToken = () => {
+  localStorage.removeItem("token");
+  applyAuthHeader(null);
+};
+
+apiClient.interceptors.request.use(
+  (config) => {
+    const latestToken = localStorage.getItem("token");
+    if (latestToken) {
+      config.headers.Authorization = `Bearer ${latestToken}`;
+    } else {
+      delete config.headers.Authorization;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error?.response?.status;
+    if (status === 401 || status === 403) {
+      clearAuthToken();
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default apiClient;

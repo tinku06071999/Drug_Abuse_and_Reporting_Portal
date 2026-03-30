@@ -68,7 +68,7 @@ public class AnxietyTestService {
                 saved.getLevel(),
                 iso(saved.getDate()),
                 user.getId() != null ? user.getId().toHexString() : null,
-                user.getName(),
+                user.getUsername(),
                 user.getEmail()
         );
     }

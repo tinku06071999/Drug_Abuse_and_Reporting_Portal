@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import UserSideBar from "./userSideBar";
 import { FaRegClock, FaRunning, FaBed, FaGlassCheers } from "react-icons/fa";
-import { getUserProfile, getUserReports } from "../../api/userApi";
+import { getUserName, getUserReports } from "../../api/userApi";
 
 export default function UserDashboard() {
   const [token, setToken] = useState("");
@@ -16,8 +16,8 @@ export default function UserDashboard() {
 
   useEffect(() => {
     // Read token from localStorage (primary) or Cookies (fallback)
-//    const t = localStorage.getItem("token") || Cookies.get("token");
-//    if (t) setToken(t);
+    const t = localStorage.getItem("token") || Cookies.get("token");
+    if (t) setToken(t);
 
     const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     setWeekday(days[new Date().getDay()]);
@@ -26,7 +26,7 @@ export default function UserDashboard() {
   useEffect(() => {
     const fetchUserName = async () => {
       try {
-        const response = await getUserProfile(); // GET /api/getUserName
+        const response = await getUserName(); // GET /api/getUserName
         if (response.status === 200) {
           setUserName(response.data.name);
         } else {

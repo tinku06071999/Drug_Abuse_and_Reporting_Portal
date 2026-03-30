@@ -24,6 +24,7 @@ function TotalReports() {
       const data = Array.isArray(res?.data) ? res.data : [];
       setAllReports(data);
       splitBuckets(data);
+
     } catch (error) {
       console.error("Error fetching reports:", error);
       alert(error?.response?.data?.message || error?.message || "Failed to load reports");
