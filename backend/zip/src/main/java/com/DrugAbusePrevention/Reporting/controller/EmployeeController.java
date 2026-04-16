@@ -1,9 +1,13 @@
 package com.DrugAbusePrevention.Reporting.controller;
 
+import com.DrugAbusePrevention.Reporting.dto.EmployeeRequest;
+import com.DrugAbusePrevention.Reporting.entity.AppUser;
 import com.DrugAbusePrevention.Reporting.entity.Employee;
 import com.DrugAbusePrevention.Reporting.entity.User;
 import com.DrugAbusePrevention.Reporting.service.EmployeeService;
 import com.DrugAbusePrevention.Reporting.service.UserService;
+import com.DrugAbusePrevention.Reporting.serviceRepository.AppUserServiceRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +24,17 @@ public class EmployeeController {
     private EmployeeService employeeService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private AppUserServiceRepository appUserServiceRepository;
 
     @GetMapping("/get-all-employees")
-    public ResponseEntity<List<Employee>>getAllEmployee(){
+    public ResponseEntity<List<EmployeeRequest>>getAllEmployee(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String employeeName = authentication.getName();
-        Employee emp = employeeService.findByEmployeeName(employeeName);
-        if(emp.getRoles().contains("ADMIN")) {
-            List<Employee> list = employeeService.getAllEmployees();
+        String email = authentication.getName();
+        AppUser emp = appUserServiceRepository.findByEmail(email).orElseThrow();
+        if(emp != null && emp.getRoles().contains("ADMIN")) {
+
+            List<EmployeeRequest> list = employeeService.getAllEmployees();
             if (list != null) {
                 return new ResponseEntity<>(list, HttpStatus.OK);
             } else {
@@ -39,8 +46,8 @@ public class EmployeeController {
     @PutMapping("/verify-employee/{id}")
     public ResponseEntity<Employee> verifyEmployee(@PathVariable String id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String employeeName = authentication.getName();
-        Employee emp = employeeService.findByEmployeeName(employeeName);
+        String email = authentication.getName();
+        AppUser emp = appUserServiceRepository.findByEmail(email).orElseThrow();
         if (emp.getRoles().contains("ADMIN")) {
             try {
                 Employee updated = employeeService.verifyEmployee(id);
@@ -57,8 +64,8 @@ public class EmployeeController {
     @PutMapping("/make-admin/{id}")
     public ResponseEntity<Employee> makeAdmin(@PathVariable String id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String employeeName = authentication.getName();
-        Employee emp = employeeService.findByEmployeeName(employeeName);
+        String email = authentication.getName();
+        AppUser emp = appUserServiceRepository.findByEmail(email).orElseThrow();
         if (emp.getRoles().contains("ADMIN")) {
             try {
                 Employee updated = employeeService.makeAdmin(id);

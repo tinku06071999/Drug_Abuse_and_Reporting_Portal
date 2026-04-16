@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import nithLogo from '../../Images/nith_logo.png';
-const AdminHeader = () => {
+const UserHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -9,10 +9,10 @@ const AdminHeader = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("isAdminLoggedIn"); // ✅ THIS WAS MISSING
+    localStorage.removeItem("isUserLoggedIn"); // ✅ THIS WAS MISSING
     sessionStorage.clear();
     document.cookie = "token=; Max-Age=0; path=/";
-    window.location.href = "/adminlogin";
+    window.location.href = "/user-login";
   };
 
   return (
@@ -42,13 +42,13 @@ const AdminHeader = () => {
         {/* Navigation links */}
         {isOpen && (
           <div className="lg:hidden absolute top-16 right-4 bg-gray-700 p-4 rounded">
-            <a href="/admin/Dashboard" className="block text-gray-300 py-2">Administration</a>
+            <a href="/user/Dashboard" className="block text-gray-300 py-2">UserDashboard</a>
             <button onClick={handleLogout} className="block text-gray-300 py-2 cursor-pointer">Logout</button>
           </div>
         )}
         {/* Navigation links for larger screens */}
         <div className="hidden lg:flex space-x-4 text-gray-500">
-          <a href="/admin/Dashboard" className="hover:text-gray-300">Administration</a>
+          <a href="/user/Dashboard" className="hover:text-gray-300">UserDashboard</a>
           <button onClick={handleLogout} className="hover:text-gray-300 cursor-pointer">Logout</button>
         </div>
       </div>
@@ -56,4 +56,4 @@ const AdminHeader = () => {
   );
 };
 
-export default AdminHeader;
+export default UserHeader;

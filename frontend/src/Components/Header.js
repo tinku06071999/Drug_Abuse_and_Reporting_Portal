@@ -23,7 +23,7 @@ const Header = () => {
   const handleClick = () => {
     Cookies.remove("token", { path: "/" });
     console.log("Token removed");
-    window.location.href = "/userLogin";
+    window.location.href = "/user-login";
   };
 
   return (
@@ -88,7 +88,7 @@ const Header = () => {
             </Link>
             {!token ? (
               <>
-                <Link to="/userLogin" className="block text-gray-300 py-2">
+                <Link to="/user-login" className="block text-gray-300 py-2">
                   User Login
                 </Link>
                 <Link to="/userSignup" className="block text-gray-300 py-2">
@@ -118,7 +118,7 @@ const Header = () => {
           </Link>
           {!token ? (
             <>
-              <Link to="/userLogin" className="hover:text-gray-300">
+              <Link to="/user-login" className="hover:text-gray-300">
                 User Login
               </Link>
               <Link to="/userSignup" className="hover:text-gray-300">

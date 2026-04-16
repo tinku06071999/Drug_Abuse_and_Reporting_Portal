@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import AdminHeader from './AdminHeader';
 import { getAllReports, updateReportStatus } from '../../api/reportApi';
+import AdminNavbar from "./AdminNavbar";
 
 function TotalReports() {
   const [allReports, setAllReports] = useState([]);
@@ -106,7 +107,7 @@ function TotalReports() {
 
   return (
     <div>
-      <AdminHeader />
+      <AdminNavbar />
       <div className="container mx-auto mt-8 p-10">
         <div className="flex items-center gap-4">
           <h1 className="text-3xl font-bold mb-4">All Reports</h1>

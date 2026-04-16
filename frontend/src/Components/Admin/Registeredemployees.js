@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AdminHeader from './AdminHeader';
 import { getEmployees, verifyEmployee,makeAdmin } from '../../api/employeeApi';
-
+import AdminNavbar from "./AdminNavbar";
 function RegisteredEmployees() {
   const [originalData, setOriginalData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,51 +35,29 @@ function RegisteredEmployees() {
     }
   }, [originalData, filterType]);
 
-  const handleVerification = async (employeeId, currentStatus, email) => {
+  const handleVerification = async (userId, currentStatus, email) => {
     try {
-      const { data: updatedEmployee } = await verifyEmployee(employeeId);
+      const { data: updatedEmployee } = await verifyEmployee(userId);
 
       // Update local cache
       setOriginalData((prev) =>
-        prev.map((emp) => (emp.employeeId === updatedEmployee.employeeId ? updatedEmployee : emp))
+        prev.map((emp) => (emp.userId === updatedEmployee.userId ? updatedEmployee : emp))
       );
 
-      // (Optional) send your separate email call (if you still use node mailer service)
-      const emailSubject = currentStatus ? 'Verification Removed' : 'Verification Success';
-      const emailText = currentStatus
-        ? "You have been removed from the Alert List of Drug abuse reporting website."
-        : "Your registration with Drug Abuse Reporting Website is successful. Next Steps: Please WhatsApp 'join flame-color' to +14155238886 to start getting reports on your phone number.";
-      const emailHtml = currentStatus
-        ? `<p>You have been removed from the Alert List of Drug abuse reporting website.</p>`
-        : `
-            <p>Your registration with Drug Abuse Reporting Website is successful.</p>
-            <p><strong>Next Steps:</strong> Please <a href="https://api.whatsapp.com/send?phone=+14155238886&text=join%20flame-color" target="_blank">Click Here</a> to start getting reports on your phone number.</p>
-            OR you can WhatsApp 'join flame-color' to +14155238886 to start getting reports on your phone number.
-          `;
+
     } catch (error) {
       console.error('Error updating employee verification status:', error);
       alert(error?.response?.data || error.message || 'Verification failed');
     }
   };
-const handleMakeAdmin = async (employeeId, currentStatus, email) => {
+const handleMakeAdmin = async (userId, currentStatus, email) => {
     try {
-      const { data: updatedEmployee } = await makeAdmin(employeeId);
+      const { data: updatedEmployee } = await makeAdmin(userId);
 
       // Update local cache
       setOriginalData((prev) =>
-        prev.map((emp) => (emp.employeeId === updatedEmployee.employeeId ? updatedEmployee : emp))
+        prev.map((emp) => (emp.userId === updatedEmployee.userId ? updatedEmployee : emp))
       );
-
-      // (Optional) send your separate email call (if you still use node mailer service)
-      const emailSubject = currentStatus ? 'Removed From Administration' : 'Added In Admin Team';
-      const emailText = currentStatus
-        ? "You have been removed from the Admin List of Drug abuse reporting portal.."
-        : "You are now Admin on Drug Abuse Reporting Portal.";
-      const emailHtml = currentStatus
-        ? `<p>You have been removed from the Admin List of Drug abuse reporting portal.</p>`
-        : `
-            <p>You are now Admin on Drug Abuse Reporting Portal.</p>
-          `;
     } catch (error) {
       console.error('Error updating employee status:', error);
       alert(error?.response?.data || error.message || 'Changes failed');
@@ -89,17 +67,8 @@ const handleMakeAdmin = async (employeeId, currentStatus, email) => {
 
   return (
     <div>
-      <AdminHeader />
+      <AdminNavbar />
       <div className="container mx-auto mt-8 ">
-        <div className="flex">
-          <h1 className="text-3xl font-bold mb-4 ml-3">Total Registered Employees</h1>
-          <div>
-            <Link to="/adminDashboard">
-              <button className="bg-blue-500 text-white px-4 py-2 rounded ml-5">Dashboard</button>
-            </Link>
-          </div>
-        </div>
-
         {/* Filters */}
         <div className="flex space-x-4 mb-4 ml-3">
           <button
@@ -126,37 +95,34 @@ const handleMakeAdmin = async (employeeId, currentStatus, email) => {
           <thead>
             <tr className="bg-gray-200">
               <th className="py-2 px-4 border-r">Sr. No</th>
-              <th className="py-2 px-4 border-r">Name</th>
               <th className="py-2 px-4 border-r">Employee ID</th>
-              <th className="py-2 px-4 border-r">Post</th>
-              <th className="py-2 px-4 border-r">Mobile No</th>
+              <th className="py-2 px-4 border-r">Name</th>
               <th className="py-2 px-4 border-r">Email</th>
-              <th className="py-2 px-4 border-r">Today Location</th>
-              <th className="py-2 px-4">Verification Status</th>
+              <th className="py-2 px-4 border-r">Mobile No</th>
+              <th className="py-2 px-4 border-r">Roles</th>
             </tr>
           </thead>
           <tbody>
             {filteredEmployees.map((employee, index) => (
-              <tr key={employee.employeeId} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
+              <tr key={employee.userId} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
                 <td className="py-2 px-4 border-r">{index + 1}</td>
-                <td className="py-2 px-4 border-r">{employee.employeeName}</td>
-                <td className="py-2 px-4 border-r">{employee.employeeId}</td>
-                <td className="py-2 px-4 border-r">{employee.employeePost}</td>
-                <td className="py-2 px-4 border-r">{employee.employeeMobile}</td>
-                <td className="py-2 px-4 border-r">{employee.employeeEmail}</td>
-                <td className="py-2 px-4 border-r">{employee.employeeTodayLocation}</td>
+                <td className="py-2 px-4 border-r">{employee.userId}</td>
+                <td className="py-2 px-4 border-r">{employee.username}</td>
+                <td className="py-2 px-4 border-r">{employee.email}</td>
+                <td className="py-2 px-4 border-r">{employee.mobile}</td>
+                <td className="py-2 px-4 border-r">{(employee.roles ?? []).slice().sort().join(", ")}</td>
                 <td className="py-2 px-4">
                   <button
-                    className={`${employee.verified ? 'bg-green-500' : 'bg-red-500'} text-white px-4 py-2 rounded`}
-                    onClick={() => handleVerification(employee.employeeId, employee.verified, employee.email)}
+                    className= {`${employee.verified ? 'bg-green-500' : 'bg-red-500'} text-white px-4 py-2 rounded`}
+                    onClick={() => handleVerification(employee.userId, employee.verified, employee.email)}
                   >
                     {employee.verified ? 'Unverify' : 'Verify'}
                   </button>
                   <button
-                     className={`${employee.admin ? 'bg-green-500' : 'bg-red-500'} text-white px-4 py-2 rounded`}
-                     onClick={() => handleMakeAdmin(employee.employeeId, employee.admin, employee.email)}
+                     className={`${employee.admin ? 'bg-green-500' : 'bg-red-500'} text-white px-4 py-2 rounded ml-3 mt-3`}
+                     onClick={() => handleMakeAdmin(employee.userId, employee.admin, employee.email)}
                      >
-                     {employee.admin ? 'Admin' : 'Employee'}
+                     {employee.roles?.includes("ADMIN") ? 'Remove Admin' : 'Make Admin'}
                      </button>
                 </td>
               </tr>

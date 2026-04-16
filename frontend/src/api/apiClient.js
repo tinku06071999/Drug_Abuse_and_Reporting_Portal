@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "/api",   // VERY IMPORTANT: must be empty to activate CRA proxy
+  baseURL: "http://localhost:8080/api",   // VERY IMPORTANT: must be empty to activate CRA proxy
   headers: { "Content-Type": "application/json" },
 });
 
@@ -55,6 +55,10 @@ apiClient.interceptors.response.use(
     const status = error?.response?.status;
     if (status === 401 || status === 403) {
       clearAuthToken();
+      localStorage.removeItem("token");
+      localStorage.removeItem("isAdminLoggedIn");
+      sessionStorage.clear();
+//      window.location.replace("/adminlogin");
     }
     return Promise.reject(error);
   }

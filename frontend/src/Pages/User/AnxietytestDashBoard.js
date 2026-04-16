@@ -14,13 +14,13 @@ function AnxietytestDashBoard() {
         </p>
         <div className="flex flex-col items-center justify-center  mt-8 ">
           <Link
-            to="/anxietyquiz"
+            to="/user/anxiety-quiz"
             className="bg-blue-500 hover:bg-blue-600 text-white font-semibold p-2 rounded-lg m-2 w-1/5"
           >
             Get Started
           </Link>
           <Link
-            to="/anxietyReport"
+            to="/user/anxiety-report"
             className="bg-blue-500 hover:bg-blue-600 text-white font-semibold p-2  rounded-lg w-1/5"
           >
             See Reports

@@ -1,8 +1,10 @@
 package com.DrugAbusePrevention.Reporting.controller;
 
+import com.DrugAbusePrevention.Reporting.dto.EmployeeRequest;
 import com.DrugAbusePrevention.Reporting.dto.JwtResponse;
 import com.DrugAbusePrevention.Reporting.dto.LoginRequest;
 import com.DrugAbusePrevention.Reporting.entity.Admin;
+import com.DrugAbusePrevention.Reporting.entity.AppUser;
 import com.DrugAbusePrevention.Reporting.entity.Employee;
 import com.DrugAbusePrevention.Reporting.entity.User;
 import com.DrugAbusePrevention.Reporting.jwt.JwtUtil;
@@ -45,7 +47,7 @@ public class AdminController {
     public ResponseEntity<?> createAdmin(@RequestBody Admin admin){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String employeeName = authentication.getName();
-        Employee emp = employeeService.findByEmployeeName(employeeName);
+        EmployeeRequest emp = employeeService.findByEmployeeName(employeeName);
         if(emp.getRoles().contains("ADMIN")) {
             admin.setPassword(passwordEncoder.encode(admin.getPassword()));
             adminService.createAdmin(admin);
@@ -54,52 +56,5 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<?>loginAdmin(@RequestBody Admin admin){
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String employeeName = authentication.getName();
-//        Employee emp = employeeService.findByEmployeeName(employeeName);
-//        if(emp.getRoles().contains("ADMIN")) {
-//            return new ResponseEntity<>(true,HttpStatus.OK);
-//        }
-//        return new ResponseEntity<>(false,HttpStatus.METHOD_NOT_ALLOWED);
-//    }
-//
-
-@PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-
-    Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                    request.getUsername(),
-                    request.getPassword()
-            )
-    );
-
-    UserDetails user = (UserDetails) authentication.getPrincipal();
-
-
-    Employee emp = employeeService.findByEmployeeName(user.getUsername());
-
-    if (emp == null || emp.getRoles() == null) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body("Invalid credentials");
-    }
-
-    boolean isAdmin = emp.getRoles().contains("ADMIN");
-
-    if (!isAdmin) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body("Only ADMIN users can login");
-    }
-
-
-    String token = jwtUtil.generateToken(
-            user.getUsername(),
-            user.getAuthorities().iterator().next().getAuthority()
-    );
-
-    return ResponseEntity.ok(new JwtResponse(token));
-}
 }
 

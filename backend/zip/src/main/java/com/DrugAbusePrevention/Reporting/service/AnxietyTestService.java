@@ -3,10 +3,13 @@ package com.DrugAbusePrevention.Reporting.service;
 import com.DrugAbusePrevention.Reporting.dto.AnxietyTestCreateRequest;
 import com.DrugAbusePrevention.Reporting.dto.AnxietyTestResponse;
 import com.DrugAbusePrevention.Reporting.entity.AnxietyTest;
+import com.DrugAbusePrevention.Reporting.entity.AppUser;
 import com.DrugAbusePrevention.Reporting.entity.User;
 import com.DrugAbusePrevention.Reporting.serviceRepository.AnxietyTestServiceRepository;
+import com.DrugAbusePrevention.Reporting.serviceRepository.AppUserServiceRepository;
 import com.DrugAbusePrevention.Reporting.serviceRepository.UserServiceRepository;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,30 +22,32 @@ import java.util.Date;
 @Service
 public class AnxietyTestService {
 
+    @Autowired
     private final AnxietyTestServiceRepository anxietyTestServiceRepository;
-    private final UserServiceRepository userServiceRepository;
+    @Autowired
+    private final AppUserServiceRepository appUserServiceRepository;
 
-    public AnxietyTestService(AnxietyTestServiceRepository anxietyRepo, UserServiceRepository userRepo) {
+   public AnxietyTestService(AnxietyTestServiceRepository anxietyRepo, AppUserServiceRepository appUserServiceRepository) {
         this.anxietyTestServiceRepository = anxietyRepo;
-        this.userServiceRepository = userRepo;
+        this.appUserServiceRepository = appUserServiceRepository;
     }
 
     public AnxietyTestResponse create(AnxietyTestCreateRequest req) {
-        // Validate score
+
         if (req.score() == null || req.score() < 0 || req.score() > 63) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Score must be between 0 and 63");
         }
 
         // Find user by userId (preferred) or by email
-        User user = null;
+        AppUser user = null;
         if (req.userId() != null && !req.userId().isBlank()) {
             if (!ObjectId.isValid(req.userId())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid userId (ObjectId expected)");
             }
-            user = userServiceRepository.findById(new ObjectId(req.userId()))
+            user = appUserServiceRepository.findById(req.userId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found by userId"));
         } else if (req.email() != null && !req.email().isBlank()) {
-            user = userServiceRepository.findByEmail(req.email())
+            user = appUserServiceRepository.findByEmail(req.email())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found by email"));
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide either userId or email");
@@ -56,7 +61,7 @@ public class AnxietyTestService {
         test.setScore(req.score());
         test.setLevel(level);
         test.setDate(new Date());
-        test.setUser(user);
+        test.setAppUser(user);
 
         // Save
         AnxietyTest saved = anxietyTestServiceRepository.save(test);
@@ -67,7 +72,7 @@ public class AnxietyTestService {
                 saved.getScore(),
                 saved.getLevel(),
                 iso(saved.getDate()),
-                user.getId() != null ? user.getId().toHexString() : null,
+                user.getUserId() != null ? user.getUserId() : null,
                 user.getUsername(),
                 user.getEmail()
         );

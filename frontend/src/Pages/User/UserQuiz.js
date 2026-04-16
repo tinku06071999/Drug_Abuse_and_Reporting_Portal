@@ -35,7 +35,7 @@ export default function UserQuiz() {
       await axios.post("http://localhost:3001/api/quiz", quizResponses, config);
 
       alert("Quiz submitted successfully!");
-      navigate("/userdashboard");
+      navigate("/user/dashboard");
     } catch (error) {
       console.error("Error submitting quiz:", error);
     }

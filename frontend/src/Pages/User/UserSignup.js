@@ -4,9 +4,13 @@ import { signupUser } from "../../api/userApi";
 
 
 const UserSignup = () => {
+  const [rollNo, setRollNo] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const[department, setDepartment] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -19,17 +23,23 @@ const UserSignup = () => {
       return;
     }
 
-    const payload = { email, password, name };
+    const payload = {
+    userId : rollNo,
+    username:name,
+    email:email,
+    password:password,
+    mobile: mobile,
+    department:department
+    };
 
     try {
       setLoading(true);
 
       const res = await signupUser(payload);
 
-      // ✅ res is Axios response, boolean is inside res.data
       if (res.data === true) {
         alert("Signup successful! Please login now");
-        navigate("/userLogin");
+        navigate("/user-login");
       } else {
         alert(res.data);
         alert("Signup failed");
@@ -57,7 +67,36 @@ const UserSignup = () => {
         <h2 className="text-xl font-bold mb-6 md:mb-8">Sign Up</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+
           <div>
+                      <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        placeholder="John Doe"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 placeholder-gray-400"
+                      />
+                    </div>
+          <div>
+          <div>
+                      <label htmlFor="rollNo" className="block mb-2 text-sm font-medium text-gray-900">
+                        Roll No.
+                      </label>
+                      <input
+                        type="text"
+                        id="rollNo"
+//                        placeholder="John Doe"
+                        value={rollNo}
+                        onChange={(e) => setRollNo(e.target.value)}
+                        required
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 placeholder-gray-400"
+                      />
+                    </div>
             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">
               Email
             </label>
@@ -86,17 +125,30 @@ const UserSignup = () => {
               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 placeholder-gray-400"
             />
           </div>
-
-          <div>
-            <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900">
-              Name
+<div>
+            <label htmlFor="mobile" className="block mb-2 text-sm font-medium text-gray-900">
+              Mobile
             </label>
             <input
               type="text"
-              id="name"
-              placeholder="John Doe"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              id="mobile"
+              placeholder="1234567890"
+              value={mobile}
+              onChange={(e) => setMobile(e.target.value)}
+              required
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 placeholder-gray-400"
+            />
+          </div>
+<div>
+            <label htmlFor="department" className="block mb-2 text-sm font-medium text-gray-900">
+              Department
+            </label>
+            <input
+              type="text"
+              id="department"
+              placeholder="Computer Science"
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
               required
               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 placeholder-gray-400"
             />

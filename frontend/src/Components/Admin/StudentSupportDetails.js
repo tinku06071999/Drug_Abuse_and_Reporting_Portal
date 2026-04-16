@@ -22,7 +22,6 @@ const StudentSupportDetails = () => {
 
   return (
     <div>
-      <AdminHeader />
       <AdminNavbar />
       <div className="container mx-auto mt-8 p-10">
         <h1 className="text-4xl font-bold mb-4">Student Support Details</h1>

@@ -16,19 +16,19 @@ function Sidebar({ OpenSidebarToggle, openSidebar, toggleTotalReports }){
 
       <ul className='sidebar-list'>
         <li className='sidebar-list-item'>
-          <Link to='/totalreports' onClick={() => toggleTotalReports()}>
+          <Link to='/admin/totalreports' onClick={() => toggleTotalReports()}>
             <BsFillArchiveFill className='icon' /> Total Reports
           </Link>
         </li>
 
 
         <li className='sidebar-list-item'>
-          <Link to='/registeredemployees' onClick={openSidebar}>
+          <Link to='/admin/registeredemployees' onClick={openSidebar}>
             <BsListCheck className='icon' /> Total Registered Employee
           </Link>
         </li>
         <li className='sidebar-list-item'>
-          <Link to='/studentSupportDetails' onClick={openSidebar}>
+          <Link to='/admin/studentSupportDetails' onClick={openSidebar}>
             <BsListCheck className='icon' /> Student Support Details
           </Link>
         </li>

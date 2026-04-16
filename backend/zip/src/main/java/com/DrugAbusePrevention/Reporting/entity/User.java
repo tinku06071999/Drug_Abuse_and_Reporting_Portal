@@ -3,6 +3,8 @@ package com.DrugAbusePrevention.Reporting.entity;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Collection;
@@ -12,8 +14,14 @@ import java.util.List;
 @Getter
 @Setter
 public class User {
-    private ObjectId id;
-    private String username;
-    private String email;
-    private String password;
+    @Id
+    private String userId;
+    private String department;
+    @DBRef
+    private AppUser appUser;
+
+    public User(String userid, String department){
+        this.userId = userId;
+        this.department = department;
+    }
 }

@@ -1,9 +1,8 @@
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { saveAnxietyTest } from "../../api/anxietyTestApi";
-
+import {getUserName} from "../../api/userApi";
 function AnxietyQuiz() {
   const questions = [
     "Are you experiencing numbness or tingling sensations?",
@@ -48,9 +47,7 @@ function AnxietyQuiz() {
 
   const fetchUserProfile = async (jwt) => {
     try {
-      const resp = await axios.get("http://localhost:3001/api/getUserName", {
-        headers: { Authorization: `Bearer ${jwt}` }
-      });
+      const resp = await getUserName();
       if (resp.status === 200 && resp.data) {
         const id = resp.data.id || resp.data.userId || null;
         setUser({
@@ -119,7 +116,7 @@ function AnxietyQuiz() {
       const resp = await saveAnxietyTest(payload, config);
 
       if (resp.status === 201) {
-        navigate("/anxietyresultpage", {
+        navigate("/user/anxiety-result-page", {
           state: { score, anxietyLevel: level }
         });
       } else {

@@ -10,21 +10,21 @@ export default function Sidebar() {
         <h2 className="text-2xl font-semibold mb-6">Dashboard</h2>
         <nav className="space-y-2">
           <Link
-            to="/anxietytestdashboard"
+            to="/user/anxiety-test-dashboard"
             className="sidebar-item flex items-center transition duration-300 hover:bg-gray-800 hover:text-teal-400 rounded-full px-4 py-2"
           >
             <MdAssessment className="mr-2" />
             Anxiety Test
           </Link>
           <Link
-            to="/userQuiz"
+            to="/user/quiz"
             className="sidebar-item flex items-center transition duration-300 hover:bg-gray-800 hover:text-teal-400 rounded-full px-4 py-2"
           >
             <MdAlarm className="mr-2" />
             Daily Wellness Quiz
           </Link>
           <Link
-            to="/userReports"
+            to="/user/anxiety-reports"
             className="sidebar-item flex items-center transition duration-300 hover:bg-gray-800 hover:text-teal-400 rounded-full px-4 py-2"
           >
             <MdAssignment className="mr-2" />
@@ -32,7 +32,7 @@ export default function Sidebar() {
           </Link>
           <div>
         <Link
-          to="/booksession"
+          to="/user/book-session"
           className="btn-primary flex items-center justify-center transition duration-300 hover:bg-teal-400 hover:text-gray-900 rounded-full px-4 py-2"
         >
           <FaUserMd className="mr-2" />

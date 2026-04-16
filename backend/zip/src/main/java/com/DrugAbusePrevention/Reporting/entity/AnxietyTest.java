@@ -19,5 +19,5 @@ public class AnxietyTest {
     private String level;
     private Date date;
     @DBRef
-    private User user;
+    private AppUser appUser;
 }

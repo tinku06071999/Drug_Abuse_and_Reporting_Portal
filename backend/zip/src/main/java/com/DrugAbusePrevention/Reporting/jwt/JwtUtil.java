@@ -1,5 +1,6 @@
 package com.DrugAbusePrevention.Reporting.jwt;
 
+import com.DrugAbusePrevention.Reporting.entity.AppUser;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
@@ -17,10 +18,11 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
 
-    public String generateToken(String username, String role) {
+    public String generateToken(AppUser appUser) {
         return Jwts.builder()
-                .setSubject(username)
-                .claim("role", role)
+                .setSubject(appUser.getEmail())
+                .claim("role", appUser.getRoles())
+                .claim("userId",appUser.getUserId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)  // ✔ 0.11.x syntax
@@ -32,15 +34,9 @@ public class JwtUtil {
         return extractAllClaims(token).getSubject();
     }
 
-    public String extractRole(String token) {
-        return extractAllClaims(token).get("role", String.class);
-    }
-
     public boolean isTokenValid(String token) {
         return extractAllClaims(token).getExpiration().after(new Date());
     }
-
-
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()

@@ -4,20 +4,18 @@ import { saveEmployee } from ".././api/employeeApi";
 
 const EmployeeForm = () => {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [employeeId,setEmployeeId] = useState();
-  const [todayLocation, setTodayLocation] = useState("");
   const [mobile, setMobile] = useState("");
-  const [email, setEmail] = useState("");
   const [roles, setRoles] = useState("warden");
 
 
   const handleNameChange = (e) => setName(e.target.value);
+  const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
   const handleEmployeeIdChange = (e) => setEmployeeId(e.target.value);
-  const handleLocationChange = (e) => setTodayLocation(e.target.value);
   const handleMobileChange = (e) => setMobile(e.target.value);
-  const handleEmailChange = (e) => setEmail(e.target.value);
   const handleRolesChange = (e) => setRoles(e.target.value);
 
   const handleSubmit = async (e) => {
@@ -25,14 +23,13 @@ const EmployeeForm = () => {
 
     try {
       const formData = {
-
-          employeeId: employeeId,
-          employeeName: name,
-          employeePassword: password,
-          employeeEmail: email,
-          employeeTodayLocation: todayLocation,
-          employeeMobile: mobile,
-          roles: ["WARDEN"]
+          userId: employeeId,
+          username: name,
+          email: email,
+          password: password,
+          mobile: mobile,
+          roles: [roles.toUpperCase()],
+          verified: false
       }
 
       const response = await saveEmployee(formData);
@@ -40,11 +37,10 @@ const EmployeeForm = () => {
       console.log("Employee Registration Form submitted successfully:", response.data);
      alert("Employee Registration Successful. Please check your mail for further steps ")
       setName("");
+      setEmail("");
       setPassword("");
       setEmployeeId("");
-      setTodayLocation("");
       setMobile("");
-      setEmail("");
       setRoles("warden");
 
     } catch (error) {
@@ -71,6 +67,18 @@ const EmployeeForm = () => {
               required
             />
           </div>
+           <div className="mb-4">
+                      <label className="block text-sm font-semibold text-gray-800">
+                        Email
+                      </label>
+                      <input
+                        type="text"
+                        value={email}
+                        onChange={handleEmailChange}
+                        className="mt-1 p-2 w-full border border-gray-300 rounded text-gray-800"
+                        required
+                      />
+                    </div>
           <div className="mb-4">
                   <label className="block text-sm font-semibold text-gray-800">
                         Password
@@ -97,18 +105,6 @@ const EmployeeForm = () => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-semibold text-gray-800">
-              Today's Location
-            </label>
-            <input
-              type="text"
-              value={todayLocation}
-              onChange={handleLocationChange}
-              className="mt-1 p-2 w-full border border-gray-300 rounded text-gray-800"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-semibold text-gray-800">
               Mobile
             </label>
             <input
@@ -119,19 +115,6 @@ const EmployeeForm = () => {
               required
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-sm font-semibold text-gray-800">
-              Email
-            </label>
-            <input
-              type="text"
-              value={email}
-              onChange={handleEmailChange}
-              className="mt-1 p-2 w-full border border-gray-300 rounded text-gray-800"
-              required
-            />
-          </div>
-
           <div className="mb-4">
             <label className="block text-sm font-semibold text-gray-800">
               Role

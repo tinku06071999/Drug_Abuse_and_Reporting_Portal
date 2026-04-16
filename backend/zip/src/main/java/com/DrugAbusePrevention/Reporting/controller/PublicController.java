@@ -1,9 +1,8 @@
 package com.DrugAbusePrevention.Reporting.controller;
 
-import com.DrugAbusePrevention.Reporting.entity.CollegeSupport;
-import com.DrugAbusePrevention.Reporting.entity.Employee;
-import com.DrugAbusePrevention.Reporting.entity.Report;
-import com.DrugAbusePrevention.Reporting.entity.User;
+import com.DrugAbusePrevention.Reporting.dto.EmployeeRequest;
+import com.DrugAbusePrevention.Reporting.dto.UserRequest;
+import com.DrugAbusePrevention.Reporting.entity.*;
 import com.DrugAbusePrevention.Reporting.service.CollegeSupportService;
 import com.DrugAbusePrevention.Reporting.service.EmployeeService;
 import com.DrugAbusePrevention.Reporting.service.ReportService;
@@ -23,6 +22,7 @@ import java.util.Arrays;
 @RequestMapping("/api/public")
 public class PublicController {
 
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -35,15 +35,14 @@ public class PublicController {
     private PasswordEncoder passwordEncoder;
 
     //signup user
-    @PostMapping("/signup")
-    public ResponseEntity<Boolean> signUp(@RequestBody User user){
+    @PostMapping("/save-user")
+    public ResponseEntity<Boolean> saveNewUser(@RequestBody UserRequest userRequest){
         try{
-            userService.signup(user);
+            userService.saveNewUser(userRequest);
             return new ResponseEntity<>(true, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
     }
 
     // saving the report
@@ -59,10 +58,10 @@ public class PublicController {
 
     //creating employee
     @PostMapping("/save-employee")
-    public ResponseEntity<Boolean>saveEmployee(@RequestBody Employee employee){
+    public ResponseEntity<Boolean>saveEmployee(@RequestBody EmployeeRequest employeeRequest){
         try{
-            employee.setRoles(employee.getRoles());
-            employeeService.saveNewEmployee(employee);
+            employeeRequest.setRoles(employeeRequest.getRoles());
+            employeeService.saveNewEmployee(employeeRequest);
             return new ResponseEntity<>(true, HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);

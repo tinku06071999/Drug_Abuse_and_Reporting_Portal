@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginAdmin } from "./../api/adminApi";
-import { setAuthToken } from "./../api/apiClient";   // ✅ FIXED
+import { setAuthToken } from "./../api/apiClient";
 
 const AdminLogin = () => {
 
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -13,16 +13,16 @@ const AdminLogin = () => {
   const handleLogin = async () => {
 
     const payload = {
-    username,
+    email,
     password
     };
 
     try {
       const res = await loginAdmin(payload);
-      setAuthToken(res.data.token);
+      setAuthToken(res.data);
       alert("Login Successful!");
 
-      navigate("/adminDashboard");
+      navigate("/admin/Dashboard",{replace: true});
     } 
     catch (error) {
       const msg =
@@ -42,11 +42,11 @@ const AdminLogin = () => {
         <h2 className="text-gray-500 text-2xl font-semibold mb-6">Admin Login</h2>
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">Username:</label>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Email:</label>
           <input
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full px-3 py-2 border rounded text-gray-800"
           />
         </div>

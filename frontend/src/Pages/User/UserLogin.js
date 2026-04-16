@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
 import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom"; // Import useNavigate once
 import { loginUser } from "../../api/userApi";
 import api from "../../api/apiClient";
+import { setAuthToken } from "../../api/apiClient";
 
 const UserLogin = () => {
   const [email, setEmail] = useState("");
@@ -16,31 +16,26 @@ const UserLogin = () => {
       alert("Please use your college email ending with @nith.ac.in");
       return;
     }
-
-    try {
-       const payload = { email, password};
-       const response = await loginUser(payload);
-       const token = response?.data?.token;
-        if (response.status === 200 && token) {
-          localStorage.setItem("token",token);
-          Cookies.set("token",token,{expires:7,sameSite:"Lax"});
-          api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-          console.log("[LOGIN] Token set, navigating...");
-          navigate("/userDashboard");
-        } else {
-        console.log(token);
-         console.error("[LOGIN] Non-200 or token missing:", response?.status, response?.data);
-        alert("Login failed: token missing or unexpected response format");
+     const payload = {
+        email,
+        password
+        };
+     try {
+          const res = await loginUser(payload);
+          setAuthToken(res.data);
+          alert("Login Successful!");
+          navigate("/user/dashboard",{replace: true});
         }
-    } catch (error) {
-        const msg =
+        catch (error) {
+          const msg =
             error?.response?.data?.error ||
             error?.response?.data?.message ||
             error?.message ||
             "Login failed";
-      console.error("Login error:", msg);
-      alert("Login Failed\n" + msg);
-    }
+
+          console.error("Login error:", msg);
+          alert("Login Failed\n" + msg);
+        }
   };
 
   return (

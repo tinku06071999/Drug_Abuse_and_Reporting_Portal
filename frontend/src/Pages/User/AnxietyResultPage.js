@@ -56,7 +56,7 @@ function AnxietyResultPage() {
         </div>
         <div className="flex justify-center mt-8">
           <Link
-            to="/anxietyReport"
+            to="/user/anxiety-report"
             className="bg-blue-500 hover:bg-blue-600 text-white font-semibold p-2 rounded-lg"
           >
             See All Reports

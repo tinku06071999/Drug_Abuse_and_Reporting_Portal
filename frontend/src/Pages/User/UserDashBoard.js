@@ -28,7 +28,7 @@ export default function UserDashboard() {
       try {
         const response = await getUserName(); // GET /api/getUserName
         if (response.status === 200) {
-          setUserName(response.data.name);
+          setUserName(response.data);
         } else {
           console.error("Failed to fetch user name");
         }
@@ -86,13 +86,7 @@ export default function UserDashboard() {
            
             <h1 className="text-4xl md:text-6xl font-bold text-center mb-8 text-gray-700">
               Hello,{" "}
-              <span
-                className={`text-${
-                  userName.length > 10 ? "4xl md:text-5xl" : "4xl md:text-6xl"
-                } text-teal-500`}
-              >
-                {userName}
-              </span>
+              <span>{userName}</span>
             </h1>
             <h2 className="text-3xl md:text-5xl text-center mb-8 text-gray-700">
               Happy{" "}

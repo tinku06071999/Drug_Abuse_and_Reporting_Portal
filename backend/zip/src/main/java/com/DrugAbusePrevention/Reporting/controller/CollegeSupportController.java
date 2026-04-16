@@ -5,6 +5,7 @@ import com.DrugAbusePrevention.Reporting.entity.User;
 import com.DrugAbusePrevention.Reporting.service.CollegeSupportService;
 import com.DrugAbusePrevention.Reporting.service.EmployeeService;
 import com.DrugAbusePrevention.Reporting.service.UserService;
+import com.DrugAbusePrevention.Reporting.serviceRepository.AppUserServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,14 @@ public class CollegeSupportController {
     private UserService userService;
     @Autowired
     private EmployeeService employeeService;
+    @Autowired
+    private AppUserServiceRepository appUserServiceRepository;
 
     @GetMapping("/get-all-responses")
     public ResponseEntity<List<CollegeSupport>> getAllResponses(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String employeeName = authentication.getName();
-        List<String>roles = employeeService.findByEmployeeName(employeeName).getRoles();
+        String email = authentication.getName();
+        List<String>roles = appUserServiceRepository.findByEmail(email).get().getRoles();
         if(roles.contains("ADMIN")) {
             List<CollegeSupport> list = collegeSupportService.getAllResponses();
             if (list != null) {
