@@ -32,7 +32,7 @@ const MainSection = () => {
           </div>
 
           <Link
-            to="/userSignup"
+            to="/user-signup"
             className="inline-flex items-center justify-center mt-8 text-white bg-blue-600 hover:bg-blue-700 rounded-xl px-6 py-3 text-xl"
           >
             Get started

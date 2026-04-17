@@ -107,25 +107,24 @@ import AdminHeader from "./Components/Admin/AdminHeader";
 
 import Main from "./Components/Main";
 import ReportForm from "./Pages/ReportForm";
-import Home from "./Pages/Home";
 import EmployeeForm from "./Pages/EmployeeForm";
-import AdminLogin from "./Pages/AdminLogin";
-import AdminDashboard from "./Pages/AdminDashboard";
+import AdminLogin from "./Components/Admin/AdminLogin";
+import AdminDashboard from "./Components/Admin/AdminDashboard";
 import TotalReports from "./Components/Admin/TotalReports";
 import Registeredemployees from "./Components/Admin/Registeredemployees";
 import StudentSupportDetails from "./Components/Admin/StudentSupportDetails";
 
-import UserLogin from "./Pages/User/UserLogin";
-import UserSignup from "./Pages/User/UserSignup";
-import UserDashboard from "./Pages/User/UserDashBoard";
-import UserHeader from "./Pages/User/UserHeader";
-import UserQuiz from "./Pages/User/UserQuiz";
-import UserReports from "./Pages/User/UserReports";
-import AnxietytestDashBoard from "./Pages/User/AnxietytestDashBoard";
-import AnxietyQuiz from "./Pages/User/AnxietyQuiz";
-import AnxietyResultPage from "./Pages/User/AnxietyResultPage";
-import AnxietyReport from "./Pages/User/AnxietyReport";
-import BookSession from "./Pages/User/BookSession";
+import UserLogin from "./Components/User/UserLogin";
+import UserSignup from "./Components/User/UserSignup";
+import UserDashboard from "./Components/User/UserDashBoard";
+import UserHeader from "./Components/User/UserHeader";
+import UserQuiz from "./Components/User/UserQuiz";
+import UserReports from "./Components/User/UserReports";
+import AnxietytestDashBoard from "./Components/User/AnxietytestDashBoard";
+import AnxietyQuiz from "./Components/User/AnxietyQuiz";
+import AnxietyResultPage from "./Components/User/AnxietyResultPage";
+import AnxietyReport from "./Components/User/AnxietyReport";
+import BookSession from "./Components/User/BookSession";
 function AppContent() {
   const location = useLocation();
 
@@ -133,7 +132,9 @@ function AppContent() {
     location.pathname.startsWith("/admin") &&
     location.pathname !== "/adminlogin";
 
-  const isUserSection = location.pathname.startsWith("/user")&&location.pathname !== "/userLogin";
+  const isUserSection = location.pathname.startsWith("/user")
+                        &&location.pathname !== "/user-login"
+                        &&location.pathname !== "/user-signup";
 
   return (
     <>
@@ -143,7 +144,6 @@ function AppContent() {
       <Routes>
         {/* public */}
         <Route path="/" element={<Main />} />
-        <Route path="/home" element={<Home />} />
         <Route path="/reportform" element={<ReportForm />} />
         <Route path="/employeeregister" element={<EmployeeForm />} />
         <Route path="/adminlogin" element={<AdminLogin />} />
@@ -153,7 +153,7 @@ function AppContent() {
         <Route path="/user-signup" element={<UserSignup />} />
         <Route path="/user/dashboard" element={<UserDashboard />} />
         <Route path="/user/quiz" element={<UserQuiz />} />
-                <Route path="/user/anxiety-reports" element={<UserReports />} />
+                <Route path="/user/quiz-reports" element={<UserReports />} />
                 <Route path="/user/anxiety-test-dashboard" element={<AnxietytestDashBoard />}/>
                 <Route path="/user/anxiety-quiz" element={<AnxietyQuiz />} />
                 <Route path="/user/anxiety-result-page" element={<AnxietyResultPage />} />

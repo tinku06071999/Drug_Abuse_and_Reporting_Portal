@@ -121,7 +121,7 @@ const Header = () => {
               <Link to="/user-login" className="hover:text-gray-300">
                 User Login
               </Link>
-              <Link to="/userSignup" className="hover:text-gray-300">
+              <Link to="/user-signup" className="hover:text-gray-300">
                 User Signup
               </Link>
             </>
