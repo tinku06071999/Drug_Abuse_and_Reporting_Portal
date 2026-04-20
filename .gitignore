@@ -1,0 +1,15 @@
+# ===== IDE files =====
+backend/.idea/
+*.iml
+*.iws
+*.ipr
+.idea/
+backend/target/
+
+# ===== OS files =====
+.DS_Store
+Thumbs.db
+
+# ===== Logs =====
+*.log
+frontend/node_modules
