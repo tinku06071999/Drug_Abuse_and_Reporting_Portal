@@ -1,0 +1,82 @@
+/* HelpDesk.css */
+.linkedin-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.linkedin-header {
+  background-color: #1da1f2; /* Twitter's blue color */
+  margin-top: 5px;
+  margin-bottom: 5px;
+  color: #fff;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.linkedin-post-form {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.linkedin-textarea {
+  resize: none;
+}
+
+.linkedin-post-btn {
+  cursor: pointer;
+  background-color: #1da1f2; /* Twitter's blue color */
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  padding: 8px 16px;
+  transition: background-color 0.3s ease;
+}
+
+.linkedin-post-btn:hover {
+  background-color: #0d8bf0; /* Darker shade of Twitter's blue */
+}
+
+.linkedin-posts {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.linkedin-post {
+  margin-bottom: 16px;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.expanded {
+  max-height: none;
+  overflow: visible;
+}
+
+.visible {
+  display: block;
+}
+
+i.fas {
+  font-size: 18px;
+}
+
+/* Counts next to the icons */
+.text-gray-600 {
+  font-size: 14px;
+}
+
+/* Spacing between the icons and counts */
+.flex.space-x-2 {
+  margin-right: 8px;
+}
+
+/* Overall spacing for the buttons */
+.flex.space-x-4 {
+  margin-top: 8px;
+}

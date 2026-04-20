@@ -1,0 +1,52 @@
+/* HelpDesk.css */
+.linkedin-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .linkedin-header {
+    background-color: #0077b5;
+    color: #fff;
+    padding: 16px;
+    border-radius: 8px;
+  }
+  
+  .linkedin-post-form {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .linkedin-textarea {
+    resize: none;
+  }
+  
+  .linkedin-post-btn {
+    cursor: pointer;
+  }
+  
+  .linkedin-posts {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+  }
+  
+  .linkedin-post {
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .expanded {
+    max-height: none;
+    overflow: visible;
+  }
+  
+  .visible {
+    display: block;
+  }
+  
